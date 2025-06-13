@@ -560,14 +560,129 @@ Implementation Guides (IGs) are crucial for real-world FHIR adoption:
 ```json
 {
   "resourceType": "Patient",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">John Doe (MRN: 12345)</div>"
+  },
   "identifier": [
-    // At least one identifier is required
+    {
+      "system": "http://hospital.example.org/identifiers/mrn",
+      "value": "12345",
+      "use": "usual"
+    }
   ],
+  "active": true,
   "name": [
-    // At least one name is required
+    {
+      "use": "official",
+      "family": "Doe",
+      "given": [
+        "John",
+        "A."
+      ]
+    }
   ],
-  "gender": "required", // Must be present
-  "birthDate": "required" // Must be present
+  "telecom": [
+    {
+      "system": "phone",
+      "value": "555-555-5555",
+      "use": "home"
+    },
+    {
+      "system": "email",
+      "value": "john.doe@example.com",
+      "use": "home"
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1980-01-01",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "123 Main St"
+      ],
+      "city": "Anytown",
+      "state": "CA",
+      "postalCode": "90210",
+      "period": {
+        "start": "2015-01-01"
+      }
+    }
+  ],
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ],
+        "text": "English"
+      },
+      "preferred": true
+    }
+  ],
+  "extension": [
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-race",
+      "extension": [
+        {
+          "url": "ombCategory",
+          "valueCoding": {
+            "system": "urn:oid:2.16.840.1.113883.6.238",
+            "code": "2106-3",
+            "display": "White"
+          }
+        },
+        {
+          "url": "text",
+          "valueString": "White"
+        }
+      ]
+    },
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity",
+      "extension": [
+        {
+          "url": "ombCategory",
+          "valueCoding": {
+            "system": "urn:oid:2.16.840.1.113883.6.238",
+            "code": "2186-5",
+            "display": "Not Hispanic or Latino"
+          }
+        },
+        {
+          "url": "text",
+          "valueString": "Not Hispanic or Latino"
+        }
+      ]
+    },
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex",
+      "valueCode": "M"
+    },
+    {
+      "url": "http://hl7.org/fhir/us/core/StructureDefinition/us-core-interpreter-needed",
+      "valueCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/v2-0136",
+            "code": "N",
+            "display": "No"
+          }
+        ],
+        "text": "No"
+      }
+    }
+  ]
 }
 ```
 
