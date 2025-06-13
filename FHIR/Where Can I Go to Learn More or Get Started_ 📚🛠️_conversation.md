@@ -338,6 +338,9 @@ FHIR uses specific data types with precise definitions:
 ```
 
 #### Extensions with Practical Examples
+FHIR extensions provide a standardized and flexible mechanism to add data to FHIR resources that are not part of the core specification. They allow implementers to include information that is specific to their particular use case, region, or organization, without breaking the interoperability of the core FHIR standard.
+
+Think of it like this: The core FHIR specification is a standard house plan. It defines the essential rooms (living room, kitchen, bedroom). But if you want to add a sunroom or a detached garage, you can do so without fundamentally changing the core structure of the house. Extensions are those additions.
 
 Extensions allow adding data not in the base FHIR specification:
 
