@@ -1,5 +1,3 @@
-
-
 "I'm completely new to health technology and trying to understand FHIR (Fast Healthcare Interoperability Resources). Can you explain FHIR to me in detail, assuming I have no prior knowledge of healthcare IT standards or medical jargon?
 
 Please cover the following points:
@@ -203,91 +201,838 @@ FHIR builds upon the lessons learned from previous healthcare data exchange stan
 
 **Key differences summarized:**
 
-Feature
-
-HL7v2
-
-CDA
-
-FHIR
-
-**Paradigm**
-
-Messaging
-
-Document-centric
-
-Resource-based (like building blocks), also supports documents
-
-**Technology**
-
-Older, non-web native (pipe-and-hat)
-
-XML-based documents
-
-Modern web standards (RESTful APIs, JSON/XML)
-
-**Granularity**
-
-Large messages
-
-Entire documents
-
-Small, discrete Resources; can be combined into documents/bundles
-
-**Ease of Use**
-
-Can be complex to parse and implement
-
-Can be complex due to document structure
-
-Generally easier for modern developers, more intuitive
-
-**Flexibility**
-
-Less flexible
-
-Structured but can be rigid
-
-Highly flexible and extensible through Profiles
-
-Export to Sheets
+| Feature | HL7v2 | CDA | FHIR |
+|---------|--------|-----|------|
+| **Paradigm** | Messaging | Document-centric | Resource-based (like building blocks), also supports documents |
+| **Technology** | Older, non-web native (pipe-and-hat) | XML-based documents | Modern web standards (RESTful APIs, JSON/XML) |
+| **Granularity** | Large messages | Entire documents | Small, discrete Resources; can be combined into documents/bundles |
+| **Ease of Use** | Can be complex to parse and implement | Can be complex due to document structure | Generally easier for modern developers, more intuitive |
+| **Flexibility** | Less flexible | Structured but can be rigid | Highly flexible and extensible through Profiles |
 
 FHIR aims to combine the best features of previous standards while leveraging modern web technologies to make data exchange more efficient and developer-friendly.
 
 ---
 
-### Challenges or Limitations of FHIR (From a Practical Perspective) ⚠️
+### FHIR Versions and Maturity Levels 📊
 
-While FHIR is powerful, it's not without challenges:
+FHIR follows a structured release cycle with different maturity levels:
 
-*   **Complexity of Healthcare Data:** Healthcare is inherently complex. Even with FHIR, modeling all nuances accurately can be challenging.
-*   **Implementation Variation:** While FHIR provides a base, how it's implemented can still vary (this is where Profiles help, but they also add a layer of complexity to manage). Not all systems will support all resources or search parameters identically.
-*   **Legacy Systems:** Many older healthcare systems don't natively support FHIR. Integrating with or upgrading these systems can be costly and time-consuming.
-*   **Security and Privacy:** Exchanging sensitive health data requires robust security and privacy measures. While FHIR itself doesn't dictate specific security protocols (it relies on standards like OAuth, TLS), ensuring these are correctly implemented is critical and can be complex.
-*   **Semantic Interoperability:** Just because two systems can exchange data using FHIR (syntactic interoperability) doesn't mean they'll interpret the meaning of that data in exactly the same way (semantic interoperability). Consistent use of terminologies (via Value Sets and Code Systems) is crucial but can still be a hurdle.
-*   **Maturity of Resources:** Not all FHIR Resources are at the same level of maturity or adoption. Some are well-tested and widely used, while others are newer or more specialized.
-*   **Cost and Effort:** Implementing FHIR, especially for large organizations, requires investment in technology, training, and process changes.
+**Current Major Versions:**
+- **FHIR R4 (4.0.1)** - Current stable version, widely adopted
+- **FHIR R5** - Latest version with new features and improvements
+- **FHIR R6** - In development
+
+**Maturity Levels (0-5):**
+- **Level 0 (Draft)** - Early development, expect major changes
+- **Level 1 (FMM1)** - Some implementation experience
+- **Level 2 (FMM2)** - Tested by implementers
+- **Level 3 (FMM3)** - Verified by multiple independent implementations
+- **Level 4 (FMM4)** - Mature, stable for production use
+- **Level 5 (Normative)** - Locked, backward compatibility guaranteed
+
+**Example:** The Patient resource is at Normative level (FMM5), meaning it's extremely stable and won't have breaking changes.
 
 ---
 
-### Where Can I Go to Learn More or Get Started? 📚🚀
+### Advanced FHIR Concepts with Examples 🔧
 
-If you're interested in diving deeper into FHIR, here are some excellent starting points:
+#### FHIR Operations
 
-*   **Official HL7 FHIR Website (HL7.org/fhir):** This is the definitive source for the FHIR specification. It includes:
-    *   The full specification documents for different versions.
-    *   Lists of all Resources and their definitions.
-    *   Implementation guides and examples.
-    *   Information on Profiles and extensions.
-    *   (Link: [http://hl7.org/fhir/](http://hl7.org/fhir/))
-*   **FHIR Community Forum (chat.fhir.org):** A very active online community where you can ask questions, share knowledge, and connect with other FHIR implementers.
-    *   (Link: [https://chat.fhir.org/](https://www.google.com/search?q=https://chat.fhir.org/))
-*   **Public FHIR Test Servers (Sandboxes):** Many organizations provide public FHIR servers (sandboxes) where you can experiment with making FHIR API calls and exploring sample data without needing to set up your own server. Some popular ones include:
-    *   HAPI FHIR Public Test Server: [https://hapi.fhir.org/](https://hapi.fhir.org/)
-    *   Logica Health (formerly Health Gorilla) Sandbox: Often listed on the FHIR wiki or through their developer programs.
-    *   Many EHR vendors also offer developer sandboxes.
-*   **FHIR Tutorials and Blogs:** Many community members and organizations publish tutorials, articles, and videos. A web search for "FHIR tutorial for beginners" will yield many results.
-*   **FHIR DevDays:** An international event for FHIR implementers, offering tutorials and learning opportunities (check their website for upcoming events and past presentations).
+Beyond basic CRUD operations, FHIR supports complex operations:
 
-Hopefully, this gives you a solid, non-technical introduction to what FHIR is all about and why it's such an exciting development in healthcare! FHIR, which stands for **Fast Healthcare Interoperability Resources**, is a modern standard designed to allow different healthcare computer systems to exchange information easily and securely. Think of it as a universal translator and a set of common building blocks for health data.
+**Example - $validate Operation:**
+```http
+POST [base]/Patient/$validate
+Content-Type: application/fhir+json
+
+{
+  "resourceType": "Patient",
+  "id": "example",
+  "name": [{
+    "use": "official",
+    "family": "Doe",
+    "given": ["John"]
+  }],
+  "gender": "male",
+  "birthDate": "1974-12-25"
+}
+```
+
+**Example - $everything Operation (get all data for a patient):**
+```http
+GET [base]/Patient/123/$everything
+```
+
+#### Search Parameters with Examples
+
+FHIR provides powerful search capabilities:
+
+**Basic Search Examples:**
+```http
+# Find all patients named "John"
+GET [base]/Patient?given=John
+
+# Find observations for a specific patient
+GET [base]/Observation?subject=Patient/123
+
+# Find lab results with specific LOINC code
+GET [base]/Observation?code=33747-0
+
+# Complex search with multiple parameters
+GET [base]/Patient?name=Smith&gender=female&birthdate=ge1980-01-01
+```
+
+**Advanced Search Modifiers:**
+```http
+# Exact match
+GET [base]/Patient?name:exact=John
+
+# Partial match (contains)
+GET [base]/Patient?name:contains=Smi
+
+# Missing values
+GET [base]/Patient?phone:missing=true
+
+# Chained search
+GET [base]/Observation?subject:Patient.name=Smith
+```
+
+#### Data Types in Detail
+
+FHIR uses specific data types with precise definitions:
+
+**Example - HumanName:**
+```json
+{
+  "name": [{
+    "use": "official",
+    "text": "Dr. John Smith Jr.",
+    "family": "Smith",
+    "given": ["John", "Michael"],
+    "prefix": ["Dr."],
+    "suffix": ["Jr."],
+    "period": {
+      "start": "1990-01-01"
+    }
+  }]
+}
+```
+
+**Example - Address:**
+```json
+{
+  "address": [{
+    "use": "home",
+    "type": "physical",
+    "text": "123 Main St, Anytown, ST 12345, USA",
+    "line": ["123 Main St", "Apt 4B"],
+    "city": "Anytown",
+    "state": "ST",
+    "postalCode": "12345",
+    "country": "USA",
+    "period": {
+      "start": "2020-01-01"
+    }
+  }]
+}
+```
+
+#### Extensions with Practical Examples
+
+Extensions allow adding data not in the base FHIR specification:
+
+**Example - Adding Patient Religion:**
+```json
+{
+  "resourceType": "Patient",
+  "extension": [{
+    "url": "http://hl7.org/fhir/StructureDefinition/patient-religion",
+    "valueCodeableConcept": {
+      "coding": [{
+        "system": "http://terminology.hl7.org/ValueSet/v3-ReligiousAffiliation",
+        "code": "1013",
+        "display": "Christian"
+      }]
+    }
+  }],
+  "name": [{
+    "given": ["John"],
+    "family": "Doe"
+  }]
+}
+```
+
+---
+
+### Detailed Resource Examples 📋
+
+#### Complete Patient Resource Example
+
+```json
+{
+  "resourceType": "Patient",
+  "id": "patient-example-001",
+  "meta": {
+    "versionId": "1",
+    "lastUpdated": "2024-01-15T10:30:00Z",
+    "profile": ["http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"]
+  },
+  "identifier": [{
+    "use": "usual",
+    "type": {
+      "coding": [{
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0203",
+        "code": "MR",
+        "display": "Medical Record Number"
+      }]
+    },
+    "system": "http://hospital.example.org/patients",
+    "value": "MRN123456"
+  }],
+  "active": true,
+  "name": [{
+    "use": "official",
+    "family": "Smith",
+    "given": ["John", "Michael"],
+    "prefix": ["Mr."]
+  }],
+  "telecom": [{
+    "system": "phone",
+    "value": "+1-555-123-4567",
+    "use": "home"
+  }, {
+    "system": "email",
+    "value": "john.smith@example.com",
+    "use": "home"
+  }],
+  "gender": "male",
+  "birthDate": "1985-03-15",
+  "address": [{
+    "use": "home",
+    "line": ["123 Oak Street"],
+    "city": "Springfield",
+    "state": "IL",
+    "postalCode": "62701",
+    "country": "US"
+  }],
+  "contact": [{
+    "relationship": [{
+      "coding": [{
+        "system": "http://terminology.hl7.org/CodeSystem/v2-0131",
+        "code": "E",
+        "display": "Emergency Contact"
+      }]
+    }],
+    "name": {
+      "family": "Smith",
+      "given": ["Jane"]
+    },
+    "telecom": [{
+      "system": "phone",
+      "value": "+1-555-987-6543"
+    }]
+  }]
+}
+```
+
+#### Complete Observation Resource Example (Lab Result)
+
+```json
+{
+  "resourceType": "Observation",
+  "id": "glucose-example",
+  "status": "final",
+  "category": [{
+    "coding": [{
+      "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+      "code": "laboratory",
+      "display": "Laboratory"
+    }]
+  }],
+  "code": {
+    "coding": [{
+      "system": "http://loinc.org",
+      "code": "33747-0",
+      "display": "Glucose [Mass/volume] in Blood"
+    }]
+  },
+  "subject": {
+    "reference": "Patient/patient-example-001"
+  },
+  "effectiveDateTime": "2024-01-15T08:30:00Z",
+  "performer": [{
+    "reference": "Organization/lab-example"
+  }],
+  "valueQuantity": {
+    "value": 95,
+    "unit": "mg/dL",
+    "system": "http://unitsofmeasure.org",
+    "code": "mg/dL"
+  },
+  "referenceRange": [{
+    "low": {
+      "value": 70,
+      "unit": "mg/dL"
+    },
+    "high": {
+      "value": 100,
+      "unit": "mg/dL"
+    },
+    "text": "Normal fasting glucose"
+  }]
+}
+```
+
+#### Bundle Example (Transaction)
+
+```json
+{
+  "resourceType": "Bundle",
+  "id": "patient-create-bundle",
+  "type": "transaction",
+  "entry": [{
+    "fullUrl": "urn:uuid:patient-001",
+    "resource": {
+      "resourceType": "Patient",
+      "name": [{
+        "given": ["Alice"],
+        "family": "Johnson"
+      }],
+      "gender": "female",
+      "birthDate": "1990-05-20"
+    },
+    "request": {
+      "method": "POST",
+      "url": "Patient"
+    }
+  }, {
+    "fullUrl": "urn:uuid:observation-001",
+    "resource": {
+      "resourceType": "Observation",
+      "status": "final",
+      "code": {
+        "coding": [{
+          "system": "http://loinc.org",
+          "code": "29463-7",
+          "display": "Body Weight"
+        }]
+      },
+      "subject": {
+        "reference": "urn:uuid:patient-001"
+      },
+      "valueQuantity": {
+        "value": 65,
+        "unit": "kg"
+      }
+    },
+    "request": {
+      "method": "POST",
+      "url": "Observation"
+    }
+  }]
+}
+```
+
+---
+
+### FHIR Implementation Guides 📖
+
+Implementation Guides (IGs) are crucial for real-world FHIR adoption:
+
+**US Core Implementation Guide Example:**
+- Defines must-support elements for US healthcare
+- Specifies required value sets and code systems
+- Provides conformance requirements
+
+**Example US Core Patient Profile Requirements:**
+```json
+{
+  "resourceType": "Patient",
+  "identifier": [
+    // At least one identifier is required
+  ],
+  "name": [
+    // At least one name is required
+  ],
+  "gender": "required", // Must be present
+  "birthDate": "required" // Must be present
+}
+```
+
+**International Patient Summary (IPS):**
+- Global standard for patient summaries
+- Defines minimum dataset for cross-border care
+- Uses international terminologies
+
+---
+
+### FHIR Security and Privacy 🔒
+
+FHIR implementations must address security comprehensively:
+
+#### OAuth 2.0 / SMART on FHIR
+
+**Authorization Flow Example:**
+```http
+# 1. Authorization Request
+GET /authorize?
+  response_type=code&
+  client_id=client123&
+  redirect_uri=https://app.example.com/callback&
+  scope=patient/Patient.read patient/Observation.read&
+  state=xyz123
+
+# 2. Token Exchange
+POST /token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&
+code=auth_code_here&
+client_id=client123&
+redirect_uri=https://app.example.com/callback
+
+# 3. Access Resource with Token
+GET /Patient/123
+Authorization: Bearer access_token_here
+```
+
+#### Consent Management Example
+
+```json
+{
+  "resourceType": "Consent",
+  "status": "active",
+  "scope": {
+    "coding": [{
+      "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+      "code": "patient-privacy"
+    }]
+  },
+  "category": [{
+    "coding": [{
+      "system": "http://terminology.hl7.org/CodeSystem/consentcategorycodes",
+      "code": "idscl"
+    }]
+  }],
+  "patient": {
+    "reference": "Patient/patient-example-001"
+  },
+  "provision": {
+    "type": "permit",
+    "actor": [{
+      "role": {
+        "coding": [{
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+          "code": "IRCP"
+        }]
+      },
+      "reference": {
+        "reference": "Organization/example-clinic"
+      }
+    }],
+    "action": [{
+      "coding": [{
+        "system": "http://terminology.hl7.org/CodeSystem/consentaction",
+        "code": "access"
+      }]
+    }],
+    "class": [{
+      "system": "http://hl7.org/fhir/resource-types",
+      "code": "Observation"
+    }]
+  }
+}
+```
+
+---
+
+### Testing and Validation Tools 🧪
+
+#### FHIR Validator Examples
+
+**Command Line Validation:**
+```bash
+java -jar validator_cli.jar patient-example.json -version 4.0.1
+```
+
+**Online Validation:**
+Visit: https://validator.fhir.org/
+
+**Example Validation Response:**
+```json
+{
+  "resourceType": "OperationOutcome",
+  "issue": [{
+    "severity": "error",
+    "code": "required",
+    "diagnostics": "Patient.name: minimum required = 1, but only found 0",
+    "location": ["Patient.name"]
+  }]
+}
+```
+
+---
+
+### Real-World Integration Patterns 🌐
+
+#### EHR Integration Example
+
+**SMART on FHIR App Launch Sequence:**
+1. User selects app from EHR
+2. EHR redirects to app with launch context
+3. App exchanges launch token for access token
+4. App makes FHIR API calls with patient context
+
+**Example Launch Parameters:**
+```json
+{
+  "iss": "https://ehr.example.com/fhir",
+  "launch": "launch_token_123",
+  "patient": "Patient/456"
+}
+```
+
+#### Mobile App Integration
+
+**React Native FHIR Client Example:**
+```javascript
+import { FhirApi } from '@smile-cdr/fhirts';
+
+const client = new FhirApi({
+  baseUrl: 'https://hapi.fhir.org/baseR4',
+  auth: {
+    tokenUrl: 'https://auth.example.com/token',
+    clientId: 'my-app'
+  }
+});
+
+// Fetch patient data
+const patient = await client.read({
+  resourceType: 'Patient',
+  id: '123'
+});
+
+// Search for observations
+const observations = await client.search({
+  resourceType: 'Observation',
+  searchParams: {
+    subject: 'Patient/123',
+    category: 'vital-signs'
+  }
+});
+```
+
+---
+
+### Performance and Scalability Considerations ⚡
+
+#### Pagination Example
+
+```http
+# Initial request
+GET /Patient?_count=50
+
+# Response includes pagination links
+{
+  "resourceType": "Bundle",
+  "link": [{
+    "relation": "next",
+    "url": "/Patient?_count=50&_offset=50"
+  }],
+  "entry": [...]
+}
+```
+
+#### Bulk Data Export (FHIR $export)
+
+```http
+# Initiate bulk export
+POST /Patient/$export
+Accept: application/fhir+json
+Prefer: respond-async
+
+# Check status
+GET /bulk-status/job123
+Authorization: Bearer access_token
+
+# Download completed files
+GET /bulk-download/patients.ndjson
+```
+
+---
+
+### Error Handling and Debugging 🐛
+
+#### Common HTTP Status Codes in FHIR
+
+```http
+# Successful responses
+200 OK - Successful read/search
+201 Created - Resource created
+204 No Content - Successful delete
+
+# Client errors
+400 Bad Request - Invalid request
+401 Unauthorized - Authentication required
+403 Forbidden - Access denied
+404 Not Found - Resource not found
+422 Unprocessable Entity - Validation failed
+
+# Server errors
+500 Internal Server Error - Server problem
+503 Service Unavailable - Server overloaded
+```
+
+#### OperationOutcome for Error Details
+
+```json
+{
+  "resourceType": "OperationOutcome",
+  "issue": [{
+    "severity": "error",
+    "code": "processing",
+    "diagnostics": "Patient identifier is required",
+    "location": ["Patient.identifier"]
+  }, {
+    "severity": "warning",
+    "code": "informational",
+    "diagnostics": "Birthdate format should be YYYY-MM-DD"
+  }]
+}
+```
+
+---
+
+### FHIR R4 Specific Features and Enhancements 🚀
+
+FHIR R4 (version 4.0.1) introduced significant improvements and new capabilities:
+
+#### New Resources in R4
+
+**Example - ResearchStudy Resource:**
+```json
+{
+  "resourceType": "ResearchStudy",
+  "status": "active",
+  "title": "Diabetes Management Study",
+  "description": "A study examining digital health interventions for diabetes management",
+  "enrollment": [{
+    "reference": "Group/diabetes-patients"
+  }],
+  "period": {
+    "start": "2024-01-01",
+    "end": "2025-12-31"
+  }
+}
+```
+
+#### Enhanced Search Capabilities
+
+**_include and _revinclude Examples:**
+```http
+# Include referenced resources
+GET /Patient/123?_include=Patient:general-practitioner
+
+# Reverse include (find resources that reference this one)
+GET /Patient/123?_revinclude=Observation:subject
+```
+
+#### GraphQL Support
+
+FHIR R4 includes native GraphQL support:
+
+```graphql
+{
+  Patient(id: "123") {
+    name {
+      given
+      family
+    }
+    birthDate
+    ObservationList {
+      code {
+        coding {
+          display
+        }
+      }
+      valueQuantity {
+        value
+        unit
+      }
+    }
+  }
+}
+```
+
+#### Subscription Framework
+
+**Subscription Resource Example:**
+```json
+{
+  "resourceType": "Subscription",
+  "status": "active",
+  "criteria": "Observation?subject=Patient/123&code=http://loinc.org|33747-0",
+  "channel": {
+    "type": "rest-hook",
+    "endpoint": "https://app.example.com/fhir-notifications",
+    "payload": "application/fhir+json"
+  }
+}
+```
+
+#### Bulk Data Operations
+
+**System-level Export:**
+```http
+POST /$export
+Accept: application/fhir+json
+Prefer: respond-async
+Authorization: Bearer access_token
+```
+
+#### Enhanced Conformance Resources
+
+**CapabilityStatement Example:**
+```json
+{
+  "resourceType": "CapabilityStatement",
+  "status": "active",
+  "kind": "instance",
+  "software": {
+    "name": "ACME FHIR Server",
+    "version": "1.0.0"
+  },
+  "fhirVersion": "4.0.1",
+  "format": ["json", "xml"],
+  "rest": [{
+    "mode": "server",
+    "security": {
+      "cors": true,
+      "service": [{
+        "coding": [{
+          "system": "http://terminology.hl7.org/CodeSystem/restful-security-service",
+          "code": "SMART-on-FHIR"
+        }]
+      }]
+    },
+    "resource": [{
+      "type": "Patient",
+      "interaction": [
+        {"code": "read"},
+        {"code": "search-type"},
+        {"code": "create"},
+        {"code": "update"}
+      ],
+      "searchParam": [{
+        "name": "name",
+        "type": "string"
+      }, {
+        "name": "birthdate",
+        "type": "date"
+      }]
+    }]
+  }]
+}
+```
+
+---
+
+### Advanced Implementation Patterns 🏗️
+
+#### Microservices Architecture with FHIR
+
+**Service Decomposition Example:**
+- Patient Service: Manages Patient resources
+- Observation Service: Handles all observations
+- Appointment Service: Manages scheduling
+- Gateway Service: Routes FHIR requests
+
+#### Event-Driven Architecture
+
+**FHIR + Apache Kafka Integration:**
+```json
+{
+  "eventType": "patient.created",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "source": "patient-service",
+  "data": {
+    "resourceType": "Patient",
+    "id": "new-patient-123",
+    "name": [{"given": ["John"], "family": "Doe"}]
+  }
+}
+```
+
+#### Multi-tenant FHIR Solutions
+
+**Tenant Isolation Patterns:**
+```http
+# URL-based tenancy
+GET /tenant1/fhir/Patient/123
+
+# Header-based tenancy
+GET /fhir/Patient/123
+X-Tenant-ID: tenant1
+
+# Token-based tenancy (tenant in JWT)
+GET /fhir/Patient/123
+Authorization: Bearer jwt_with_tenant_claim
+```
+
+---
+
+### Future of FHIR and Emerging Trends 🔮
+
+#### FHIR R5 Preview Features
+
+**New Subscription Topics:**
+```json
+{
+  "resourceType": "SubscriptionTopic",
+  "url": "http://example.org/topics/patient-admission",
+  "title": "Patient Admission Topic",
+  "status": "active",
+  "resourceTrigger": [{
+    "resource": "Encounter",
+    "supportedInteraction": ["create", "update"],
+    "fhirPathCriteria": "Encounter.status = 'in-progress'"
+  }]
+}
+```
+
+#### AI/ML Integration with FHIR
+
+**Example - AI-Generated Clinical Insights:**
+```json
+{
+  "resourceType": "Observation",
+  "status": "final",
+  "category": [{
+    "coding": [{
+      "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+      "code": "survey"
+    }]
+  }],
+  "code": {
+    "coding": [{
+      "system": "http://example.org/ai-insights",
+      "code": "diabetes-risk-score",
+      "display": "AI-calculated Diabetes Risk Score"
+    }]
+  },
+  "subject": {"reference": "Patient/123"},
+  "valueQuantity": {
+    "value": 0.75,
+    "unit": "probability"
+  },
+  "method": {
+    "coding": [{
+      "system": "http://example.org/methods",
+      "code": "ml-model-v2.1",
+      "display": "Machine Learning Risk Assessment Model v2.1"
+    }]
+  }
+}
+```
+
+This comprehensive guide provides you with both foundational knowledge and advanced implementation details for working with FHIR R4. The examples are practical and can be used as starting points for your own FHIR implementations.
